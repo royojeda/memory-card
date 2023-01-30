@@ -5,7 +5,7 @@ import Card from "./components/Card";
 export default function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cards, setCards] = useState(
-    [...Array(4)].map((e, i) => ({
+    [...Array(12)].map((e, i) => ({
       id: uniqid(),
       content: `${i + 1}`,
     }))
