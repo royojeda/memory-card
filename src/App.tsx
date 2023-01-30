@@ -4,12 +4,12 @@ import Card from "./components/Card";
 
 export default function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [cards, setCards] = useState([
-    { id: uniqid(), content: "1" },
-    { id: uniqid(), content: "2" },
-    { id: uniqid(), content: "3" },
-    { id: uniqid(), content: "4" },
-  ]);
+  const [cards, setCards] = useState(
+    [...Array(4)].map((e, i) => ({
+      id: uniqid(),
+      content: `${i + 1}`,
+    }))
+  );
 
   const [clickedCards, setClickedCards] = useState<
     Array<{ id: string; content: string }>
