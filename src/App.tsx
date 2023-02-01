@@ -3,7 +3,6 @@ import uniqid from "uniqid";
 import Card from "./components/Card";
 
 export default function App() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cards, setCards] = useState(
     [...Array(12)].map((e, i) => ({
       id: uniqid(),
@@ -15,10 +14,30 @@ export default function App() {
     Array<{ id: string; content: string }>
   >([]);
 
+  const shuffle = <Type,>(inputArray: Type[]): Type[] => {
+    const outputArray = [...inputArray];
+
+    let maxIndex = inputArray.length;
+    while (maxIndex > 0) {
+      const randomIndex = Math.floor(Math.random() * maxIndex);
+      maxIndex -= 1;
+
+      if (randomIndex !== maxIndex) {
+        [outputArray[maxIndex], outputArray[randomIndex]] = [
+          outputArray[randomIndex],
+          outputArray[maxIndex],
+        ];
+      }
+    }
+
+    return outputArray;
+  };
+
   useEffect(() => {
+    setCards(shuffle(cards));
     console.clear();
     console.table(clickedCards);
-  });
+  }, [clickedCards]);
 
   const handleClick = (card: { id: string; content: string }) => {
     if (clickedCards.includes(card)) {
