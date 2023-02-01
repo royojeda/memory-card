@@ -7,7 +7,7 @@ export default function Card({ content, onClick }: CardProps) {
   const handleClick: React.MouseEventHandler = (event) => {
     setTimeout(() => {
       onClick(event);
-    }, 75);
+    }, 200);
   };
 
   return (
