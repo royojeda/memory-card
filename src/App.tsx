@@ -58,13 +58,13 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen max-w-[100vw] bg-slate-800 text-slate-300">
-      <div className="flex flex-1 flex-col items-center justify-center gap-8 p-8">
-        <div className="flex w-40 divide-x divide-slate-900 rounded-md bg-slate-700 px-4 py-2 text-center shadow shadow-slate-900">
-          <div className="w-1/2 min-w-fit pr-4 xl:text-lg">
+      <div className="flex flex-1 flex-col items-center justify-center gap-8 p-8 xl:gap-16">
+        <div className="flex w-52 select-none divide-x divide-slate-500 rounded-md bg-slate-700 px-4 py-2 text-center shadow shadow-slate-900 xl:px-8 xl:py-4">
+          <div className="w-1/2 min-w-fit pr-4 xl:pr-8 xl:text-lg">
             <div>Score</div>
             <div className="text-2xl xl:text-3xl">{score.current}</div>
           </div>
-          <div className="w-1/2 min-w-fit pl-4 xl:text-lg">
+          <div className="w-1/2 min-w-fit pl-4 xl:pl-8 xl:text-lg">
             <div>Best</div>
             <div className="text-2xl xl:text-3xl">{score.highest}</div>
           </div>
