@@ -3,8 +3,7 @@ interface CardProps {
   onClick: React.MouseEventHandler;
 }
 
-export default function Card(props: CardProps) {
-  const { content, onClick } = props;
+export default function Card({ content, onClick }: CardProps) {
   const handleClick: React.MouseEventHandler = (event) => {
     setTimeout(() => {
       onClick(event);
