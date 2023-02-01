@@ -14,7 +14,7 @@ export default function App() {
     Array<{ id: string; content: string }>
   >([]);
   const [score, setScore] = useState({ current: 0, highest: 0 });
-  const [isGameOver, setIsGameOver] = useState(true);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   const shuffle = <Type,>(inputArray: Type[]): Type[] => {
     const outputArray = [...inputArray];
