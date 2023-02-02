@@ -9,6 +9,22 @@ interface CardType {
 }
 
 export default function App() {
+  const [cards] = useState(
+    [...Array(50)].map((e, i) => ({
+      id: uniqid(),
+      content: `${i + 1}`,
+    }))
+  );
+  const [clickedCards, setClickedCards] = useState<Array<CardType>>([]);
+  const [displayedCards, setDisplayedCards] = useState<Array<CardType>>([]);
+  const [score, setScore] = useState({
+    current: 0,
+    highest: localStorage.getItem("highScore")
+      ? Number(localStorage.getItem("highScore"))
+      : 0,
+  });
+  const [isGameOver, setIsGameOver] = useState(false);
+
   const shuffle = (inputArray: CardType[]) => {
     const outputArray = [...inputArray];
 
@@ -27,24 +43,6 @@ export default function App() {
 
     return outputArray;
   };
-
-  const [cards] = useState(
-    [...Array(50)].map((e, i) => ({
-      id: uniqid(),
-      content: `${i + 1}`,
-    }))
-  );
-  const [clickedCards, setClickedCards] = useState<Array<CardType>>([]);
-  const [displayedCards, setDisplayedCards] = useState<Array<CardType>>(
-    shuffle(clickedCards)
-  );
-  const [score, setScore] = useState({
-    current: 0,
-    highest: localStorage.getItem("highScore")
-      ? Number(localStorage.getItem("highScore"))
-      : 0,
-  });
-  const [isGameOver, setIsGameOver] = useState(false);
 
   const chooseCards = (): CardType[] => {
     const filteredCards = cards.filter((card) => !clickedCards.includes(card));
