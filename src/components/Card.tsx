@@ -14,7 +14,7 @@ export default function Card({ content, onClick }: CardProps) {
     <button
       type="button"
       onClick={handleClick}
-      className="aspect-square w-28 max-w-xs rounded-md border border-slate-900 bg-slate-700 shadow-md shadow-slate-900 transition duration-75 active:scale-95 sm:aspect-auto sm:h-44 sm:w-32 md:h-48 md:w-36 xl:h-72 xl:w-44"
+      className="aspect-square w-28 max-w-xs rounded-md border border-slate-900 bg-slate-700 shadow-md shadow-slate-900 transition duration-75 active:scale-95 sm:aspect-auto sm:h-44 sm:w-32 md:h-48 md:w-36 xl:h-72 xl:w-44 2xl:h-80 2xl:w-52"
     >
       {content}
     </button>
