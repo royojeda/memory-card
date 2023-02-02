@@ -3,8 +3,13 @@ import uniqid from "uniqid";
 import Card from "./components/Card";
 import Modal from "./components/Modal";
 
+interface CardType {
+  id: string;
+  content: string;
+}
+
 export default function App() {
-  const shuffle = (inputArray: { id: string; content: string }[]) => {
+  const shuffle = (inputArray: CardType[]) => {
     const outputArray = [...inputArray];
 
     let maxIndex = inputArray.length;
@@ -29,12 +34,10 @@ export default function App() {
       content: `${i + 1}`,
     }))
   );
-  const [clickedCards, setClickedCards] = useState<
-    Array<{ id: string; content: string }>
-  >([]);
-  const [displayedCards, setDisplayedCards] = useState<
-    Array<{ id: string; content: string }>
-  >(shuffle(clickedCards));
+  const [clickedCards, setClickedCards] = useState<Array<CardType>>([]);
+  const [displayedCards, setDisplayedCards] = useState<Array<CardType>>(
+    shuffle(clickedCards)
+  );
   const [score, setScore] = useState({
     current: 0,
     highest: localStorage.getItem("highScore")
@@ -43,7 +46,7 @@ export default function App() {
   });
   const [isGameOver, setIsGameOver] = useState(false);
 
-  const chooseCards = (): { id: string; content: string }[] => {
+  const chooseCards = (): CardType[] => {
     const filteredCards = cards.filter((card) => !clickedCards.includes(card));
     const numberOfDisplayedCards = 12;
 
@@ -67,7 +70,7 @@ export default function App() {
     setDisplayedCards(chooseCards());
   }, [clickedCards]);
 
-  const handleClick = (card: { id: string; content: string }) => {
+  const handleClick = (card: CardType) => {
     if (clickedCards.includes(card)) {
       setIsGameOver(true);
     } else {
