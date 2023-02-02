@@ -35,7 +35,12 @@ export default function App() {
   const [displayedCards, setDisplayedCards] = useState<
     Array<{ id: string; content: string }>
   >(shuffle(clickedCards));
-  const [score, setScore] = useState({ current: 0, highest: 0 });
+  const [score, setScore] = useState({
+    current: 0,
+    highest: localStorage.getItem("highScore")
+      ? Number(localStorage.getItem("highScore"))
+      : 0,
+  });
   const [isGameOver, setIsGameOver] = useState(false);
 
   const chooseCards = (): { id: string; content: string }[] => {
@@ -68,6 +73,7 @@ export default function App() {
     } else {
       if (score.current >= score.highest) {
         setScore({ current: score.current + 1, highest: score.highest + 1 });
+        localStorage.setItem("highScore", `${score.highest + 1}`);
       } else {
         setScore({ ...score, current: score.current + 1 });
       }
