@@ -4,19 +4,7 @@ import Card from "./components/Card";
 import Modal from "./components/Modal";
 
 export default function App() {
-  const [cards, setCards] = useState(
-    [...Array(12)].map((e, i) => ({
-      id: uniqid(),
-      content: `${i + 1}`,
-    }))
-  );
-  const [clickedCards, setClickedCards] = useState<
-    Array<{ id: string; content: string }>
-  >([]);
-  const [score, setScore] = useState({ current: 0, highest: 0 });
-  const [isGameOver, setIsGameOver] = useState(false);
-
-  const shuffle = <Type,>(inputArray: Type[]): Type[] => {
+  const shuffle = (inputArray: { id: string; content: string }[]) => {
     const outputArray = [...inputArray];
 
     let maxIndex = inputArray.length;
@@ -35,10 +23,43 @@ export default function App() {
     return outputArray;
   };
 
+  const [cards] = useState(
+    [...Array(50)].map((e, i) => ({
+      id: uniqid(),
+      content: `${i + 1}`,
+    }))
+  );
+  const [clickedCards, setClickedCards] = useState<
+    Array<{ id: string; content: string }>
+  >([]);
+  const [displayedCards, setDisplayedCards] = useState<
+    Array<{ id: string; content: string }>
+  >(shuffle(clickedCards));
+  const [score, setScore] = useState({ current: 0, highest: 0 });
+  const [isGameOver, setIsGameOver] = useState(false);
+
+  const chooseCards = (): { id: string; content: string }[] => {
+    const filteredCards = cards.filter((card) => !clickedCards.includes(card));
+    const numberOfDisplayedCards = 12;
+
+    if (filteredCards.length === 0) {
+      setIsGameOver(true);
+      return shuffle(clickedCards.slice(0, numberOfDisplayedCards));
+    }
+
+    const numberOfUnclickedCardsToChoose =
+      clickedCards.length >= numberOfDisplayedCards
+        ? 1
+        : numberOfDisplayedCards - clickedCards.length;
+    const validUnclickedCards = shuffle(filteredCards);
+    return shuffle([
+      ...shuffle(clickedCards).slice(0, numberOfDisplayedCards - 1),
+      ...validUnclickedCards.slice(0, numberOfUnclickedCardsToChoose),
+    ]);
+  };
+
   useEffect(() => {
-    setCards(shuffle(cards));
-    console.clear();
-    console.table(clickedCards);
+    setDisplayedCards(chooseCards());
   }, [clickedCards]);
 
   const handleClick = (card: { id: string; content: string }) => {
@@ -75,7 +96,7 @@ export default function App() {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6 xl:gap-8">
-          {cards.map((card) => (
+          {displayedCards.map((card) => (
             <Card
               key={card.id}
               content={card.content}
