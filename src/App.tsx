@@ -102,19 +102,24 @@ export default function App() {
     <div className="flex min-h-dvh max-w-[100vw] select-none bg-slate-800 text-slate-300">
       {isGameOver && <Modal onClick={handlePlayAgain} />}
       <div className="flex flex-1 flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 xl:gap-16 short:flex-row short:gap-4 short:p-4">
-        <div className="z-20 flex w-56 divide-x divide-slate-500 rounded-md bg-slate-700 px-4 py-2 text-center shadow shadow-slate-900 xl:px-8 xl:py-4 short:w-auto short:flex-col short:divide-x-0 short:divide-y short:px-4 short:py-2">
-          <div className="w-1/2 min-w-fit pr-4 xl:pr-8 xl:text-lg short:w-auto short:px-0 short:pb-2 short:text-base">
-            <div>Score</div>
-            <div className="text-2xl xl:text-3xl short:text-2xl">
-              {score.current}
+        <div className="flex flex-col items-center gap-2">
+          <div className="z-20 flex w-56 divide-x divide-slate-500 rounded-md bg-slate-700 px-4 py-2 text-center shadow shadow-slate-900 xl:px-8 xl:py-4 short:w-auto short:flex-col short:divide-x-0 short:divide-y short:px-4 short:py-2">
+            <div className="w-1/2 min-w-fit pr-4 xl:pr-8 xl:text-lg short:w-auto short:px-0 short:pb-2 short:text-base">
+              <div>Score</div>
+              <div className="text-2xl xl:text-3xl short:text-2xl">
+                {score.current}
+              </div>
+            </div>
+            <div className="w-1/2 min-w-fit pl-4 xl:pl-8 xl:text-lg short:w-auto short:px-0 short:pt-2 short:text-base">
+              <div>Best</div>
+              <div className="text-2xl xl:text-3xl short:text-2xl">
+                {score.highest}
+              </div>
             </div>
           </div>
-          <div className="w-1/2 min-w-fit pl-4 xl:pl-8 xl:text-lg short:w-auto short:px-0 short:pt-2 short:text-base">
-            <div>Best</div>
-            <div className="text-2xl xl:text-3xl short:text-2xl">
-              {score.highest}
-            </div>
-          </div>
+          <p className="max-w-56 text-balance text-center text-sm text-slate-400 short:max-w-20 short:text-xs">
+            Tap all {cards.length} numbers, each only once.
+          </p>
         </div>
         <div className="grid w-full max-w-sm grid-cols-3 gap-3 sm:w-auto sm:max-w-none sm:grid-cols-4 sm:gap-4 lg:grid-cols-6 xl:gap-8 short:h-[calc(100dvh-2rem)] short:max-w-3xl short:flex-1 short:grid-cols-6 short:grid-rows-2 short:gap-3">
           {displayedCards.map((card) => (
