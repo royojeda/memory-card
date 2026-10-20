@@ -89,9 +89,9 @@ export default function App() {
   };
 
   return (
-    <div className="flex min-h-screen max-w-[100vw] select-none bg-slate-800 text-slate-300">
+    <div className="flex min-h-dvh max-w-[100vw] select-none bg-slate-800 text-slate-300">
       {isGameOver && <Modal onClick={handlePlayAgain} />}
-      <div className="flex flex-1 flex-col items-center justify-center gap-8 p-8 xl:gap-16">
+      <div className="flex flex-1 flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 xl:gap-16">
         <div className="z-20 flex w-56 divide-x divide-slate-500 rounded-md bg-slate-700 px-4 py-2 text-center shadow shadow-slate-900 xl:px-8 xl:py-4">
           <div className="w-1/2 min-w-fit pr-4 xl:pr-8 xl:text-lg">
             <div>Score</div>
@@ -102,7 +102,7 @@ export default function App() {
             <div className="text-2xl xl:text-3xl">{score.highest}</div>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6 xl:gap-8">
+        <div className="grid w-full max-w-sm grid-cols-3 gap-3 sm:w-auto sm:max-w-none sm:grid-cols-4 sm:gap-4 lg:grid-cols-6 xl:gap-8">
           {displayedCards.map((card) => (
             <Card
               key={card.id}
