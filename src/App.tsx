@@ -23,7 +23,10 @@ export default function App() {
       ? Number(localStorage.getItem("highScore"))
       : 0,
   });
-  const [gameResult, setGameResult] = useState<"won" | "lost" | null>(null);
+  const [gameResult, setGameResult] = useState<
+    { outcome: "won" } | { outcome: "lost"; repeatedCard: CardType } | null
+  >(null);
+  const bestAtStart = useRef(score.highest);
   const isTapPending = useRef(false);
 
   const shuffle = (inputArray: CardType[]) => {
@@ -50,7 +53,7 @@ export default function App() {
     const numberOfDisplayedCards = 12;
 
     if (filteredCards.length === 0) {
-      setGameResult("won");
+      setGameResult({ outcome: "won" });
       return shuffle(clickedCards.slice(0, numberOfDisplayedCards));
     }
 
@@ -79,7 +82,7 @@ export default function App() {
     // Let the press animation play before the cards reshuffle.
     setTimeout(() => {
       if (clickedCards.includes(card)) {
-        setGameResult("lost");
+        setGameResult({ outcome: "lost", repeatedCard: card });
       } else {
         if (score.current >= score.highest) {
           setScore({ current: score.current + 1, highest: score.highest + 1 });
@@ -93,6 +96,7 @@ export default function App() {
   };
 
   const handlePlayAgain = () => {
+    bestAtStart.current = score.highest;
     setScore({ ...score, current: 0 });
     setClickedCards([]);
     setGameResult(null);
@@ -103,10 +107,16 @@ export default function App() {
       {gameResult && (
         <Modal
           heading={
-            gameResult === "won"
+            gameResult.outcome === "won"
               ? `You remembered all ${cards.length}!`
               : "GAME OVER!"
           }
+          message={
+            gameResult.outcome === "lost"
+              ? `You already picked ${gameResult.repeatedCard.content}.`
+              : null
+          }
+          isNewBest={score.current > bestAtStart.current}
           onClick={handlePlayAgain}
         />
       )}
