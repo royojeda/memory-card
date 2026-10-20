@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface ModalProps {
   heading: string;
@@ -14,14 +14,19 @@ export default function Modal({
   onClick,
 }: ModalProps) {
   const [modalClass, setModalClass] = useState("opacity-0 z-[-1]");
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const isClosing = useRef(false);
 
   useEffect(() => {
+    buttonRef.current?.focus();
     setTimeout(() => {
       setModalClass("opacity-100");
     }, 5);
   }, []);
 
   const handleClick = () => {
+    if (isClosing.current) return;
+    isClosing.current = true;
     setModalClass("opacity-0");
     setTimeout(() => {
       setModalClass("opacity-0 z-[-1]");
@@ -43,8 +48,9 @@ export default function Modal({
         </div>
         <button
           type="button"
+          ref={buttonRef}
           onClick={handleClick}
-          className="rounded border border-slate-900 bg-slate-800 py-2 shadow-md shadow-slate-900 transition hover:bg-slate-600 focus:ring focus:ring-slate-500"
+          className="rounded border border-slate-900 bg-slate-800 py-2 shadow-md shadow-slate-900 transition hover:bg-slate-600 focus-visible:ring focus-visible:ring-slate-500"
         >
           Play again
         </button>

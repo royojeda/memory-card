@@ -28,6 +28,8 @@ export default function App() {
   >(null);
   const bestAtStart = useRef(score.highest);
   const isTapPending = useRef(false);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const focusedSlot = useRef(-1);
 
   const shuffle = (inputArray: CardType[]) => {
     const outputArray = [...inputArray];
@@ -73,11 +75,22 @@ export default function App() {
     isTapPending.current = false;
   }, [clickedCards]);
 
+  // Keep keyboard focus on the same grid position after a reshuffle, rather
+  // than following the picked card to its new position.
+  useEffect(() => {
+    const slot = gridRef.current?.children[focusedSlot.current];
+    if (slot instanceof HTMLElement) slot.focus();
+    focusedSlot.current = -1;
+  }, [displayedCards]);
+
   const handleClick = (card: CardType) => {
     // Ignore taps until the previous one has reshuffled the cards, so that
     // this handler never acts on stale state.
     if (isTapPending.current) return;
     isTapPending.current = true;
+    focusedSlot.current = Array.from(gridRef.current?.children ?? []).indexOf(
+      document.activeElement as Element
+    );
 
     // Let the press animation play before the cards reshuffle.
     setTimeout(() => {
@@ -140,11 +153,15 @@ export default function App() {
             Tap all {cards.length} numbers, each only once.
           </p>
         </div>
-        <div className="grid w-full max-w-sm grid-cols-3 gap-3 sm:w-auto sm:max-w-none sm:grid-cols-4 sm:gap-4 lg:grid-cols-6 xl:gap-8 short:h-[calc(100dvh-2rem)] short:max-w-3xl short:flex-1 short:grid-cols-6 short:grid-rows-2 short:gap-3">
+        <div
+          ref={gridRef}
+          className="grid w-full max-w-sm grid-cols-3 gap-3 sm:w-auto sm:max-w-none sm:grid-cols-4 sm:gap-4 lg:grid-cols-6 xl:gap-8 short:h-[calc(100dvh-2rem)] short:max-w-3xl short:flex-1 short:grid-cols-6 short:grid-rows-2 short:gap-3"
+        >
           {displayedCards.map((card) => (
             <Card
               key={card.id}
               content={card.content}
+              disabled={gameResult !== null}
               onClick={() => {
                 handleClick(card);
               }}
