@@ -108,6 +108,11 @@ export default function App() {
     }, 200);
   };
 
+  const handleResetBest = () => {
+    localStorage.removeItem("highScore");
+    setScore({ ...score, highest: 0 });
+  };
+
   const handlePlayAgain = () => {
     bestAtStart.current = score.highest;
     setScore({ ...score, current: 0 });
@@ -129,8 +134,12 @@ export default function App() {
               ? `You already picked ${gameResult.repeatedCard.content}.`
               : null
           }
-          isNewBest={score.current > bestAtStart.current}
+          isNewBest={
+            score.current > bestAtStart.current &&
+            score.current === score.highest
+          }
           onClick={handlePlayAgain}
+          onResetBest={score.highest > 0 ? handleResetBest : null}
         />
       )}
       <div className="flex flex-1 flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 xl:gap-16 short:flex-row short:gap-4 short:p-4">

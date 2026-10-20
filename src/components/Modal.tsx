@@ -5,6 +5,7 @@ interface ModalProps {
   message: string | null;
   isNewBest: boolean;
   onClick: () => void;
+  onResetBest: (() => void) | null;
 }
 
 export default function Modal({
@@ -12,8 +13,10 @@ export default function Modal({
   message,
   isNewBest,
   onClick,
+  onResetBest,
 }: ModalProps) {
   const [modalClass, setModalClass] = useState("opacity-0 z-[-1]");
+  const [isConfirmingReset, setIsConfirmingReset] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const isClosing = useRef(false);
 
@@ -34,6 +37,15 @@ export default function Modal({
     }, 500);
   };
 
+  const handleResetClick = () => {
+    if (isConfirmingReset) {
+      onResetBest?.();
+      setIsConfirmingReset(false);
+    } else {
+      setIsConfirmingReset(true);
+    }
+  };
+
   return (
     <div
       className={`fixed inset-0 flex items-center justify-center p-4 backdrop-blur backdrop-brightness-75 transition duration-500 ${modalClass}`}
@@ -46,14 +58,25 @@ export default function Modal({
             <div className="font-semibold text-amber-300">New best!</div>
           )}
         </div>
-        <button
-          type="button"
-          ref={buttonRef}
-          onClick={handleClick}
-          className="rounded border border-slate-900 bg-slate-800 py-2 shadow-md shadow-slate-900 transition hover:bg-slate-600 focus-visible:ring focus-visible:ring-slate-500"
-        >
-          Play again
-        </button>
+        <div className="flex flex-col gap-3">
+          <button
+            type="button"
+            ref={buttonRef}
+            onClick={handleClick}
+            className="rounded border border-slate-900 bg-slate-800 py-2 shadow-md shadow-slate-900 transition hover:bg-slate-600 focus-visible:ring focus-visible:ring-slate-500"
+          >
+            Play again
+          </button>
+          {onResetBest && (
+            <button
+              type="button"
+              onClick={handleResetClick}
+              className="self-center rounded px-2 py-1 text-sm text-slate-400 underline-offset-2 hover:underline focus-visible:ring focus-visible:ring-slate-500"
+            >
+              {isConfirmingReset ? "Tap again to reset" : "Reset best score"}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
