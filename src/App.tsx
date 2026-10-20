@@ -83,6 +83,19 @@ export default function App() {
     focusedSlot.current = -1;
   }, [displayedCards]);
 
+  // Briefly fade the cards in after each reshuffle, so every tap visibly
+  // registers.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    gridRef.current?.animate(
+      [
+        { opacity: 0.4, transform: "scale(0.98)" },
+        { opacity: 1, transform: "none" },
+      ],
+      { duration: 150, easing: "ease-out" }
+    );
+  }, [displayedCards]);
+
   const handleClick = (card: CardType) => {
     // Ignore taps until the previous one has reshuffled the cards, so that
     // this handler never acts on stale state.
