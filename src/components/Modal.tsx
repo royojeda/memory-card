@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 
 interface ModalProps {
+  heading: string;
   onClick: () => void;
 }
 
-export default function Modal({ onClick }: ModalProps) {
+export default function Modal({ heading, onClick }: ModalProps) {
   const [modalClass, setModalClass] = useState("opacity-0 z-[-1]");
 
   useEffect(() => {
@@ -23,10 +24,10 @@ export default function Modal({ onClick }: ModalProps) {
 
   return (
     <div
-      className={`fixed inset-0 flex items-center justify-center backdrop-blur backdrop-brightness-75 transition duration-500 ${modalClass}`}
+      className={`fixed inset-0 flex items-center justify-center p-4 backdrop-blur backdrop-brightness-75 transition duration-500 ${modalClass}`}
     >
-      <div className="flex flex-col gap-8 rounded-md border border-slate-900 bg-slate-700 p-8 shadow-md shadow-slate-900">
-        <div className="text-3xl">GAME OVER!</div>
+      <div className="flex max-w-sm flex-col gap-8 rounded-md border border-slate-900 bg-slate-700 p-8 shadow-md shadow-slate-900">
+        <div className="text-balance text-center text-3xl">{heading}</div>
         <button
           type="button"
           onClick={handleClick}

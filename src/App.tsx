@@ -23,7 +23,7 @@ export default function App() {
       ? Number(localStorage.getItem("highScore"))
       : 0,
   });
-  const [isGameOver, setIsGameOver] = useState(false);
+  const [gameResult, setGameResult] = useState<"won" | "lost" | null>(null);
   const isTapPending = useRef(false);
 
   const shuffle = (inputArray: CardType[]) => {
@@ -50,7 +50,7 @@ export default function App() {
     const numberOfDisplayedCards = 12;
 
     if (filteredCards.length === 0) {
-      setIsGameOver(true);
+      setGameResult("won");
       return shuffle(clickedCards.slice(0, numberOfDisplayedCards));
     }
 
@@ -79,7 +79,7 @@ export default function App() {
     // Let the press animation play before the cards reshuffle.
     setTimeout(() => {
       if (clickedCards.includes(card)) {
-        setIsGameOver(true);
+        setGameResult("lost");
       } else {
         if (score.current >= score.highest) {
           setScore({ current: score.current + 1, highest: score.highest + 1 });
@@ -95,12 +95,21 @@ export default function App() {
   const handlePlayAgain = () => {
     setScore({ ...score, current: 0 });
     setClickedCards([]);
-    setIsGameOver(false);
+    setGameResult(null);
   };
 
   return (
     <div className="flex min-h-dvh max-w-[100vw] select-none bg-slate-800 text-slate-300">
-      {isGameOver && <Modal onClick={handlePlayAgain} />}
+      {gameResult && (
+        <Modal
+          heading={
+            gameResult === "won"
+              ? `You remembered all ${cards.length}!`
+              : "GAME OVER!"
+          }
+          onClick={handlePlayAgain}
+        />
+      )}
       <div className="flex flex-1 flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 xl:gap-16 short:flex-row short:gap-4 short:p-4">
         <div className="flex flex-col items-center gap-2">
           <div className="z-20 flex w-56 divide-x divide-slate-500 rounded-md bg-slate-700 px-4 py-2 text-center shadow shadow-slate-900 xl:px-8 xl:py-4 short:w-auto short:flex-col short:divide-x-0 short:divide-y short:px-4 short:py-2">
