@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import uniqid from "uniqid";
 import Card from "./components/Card";
 import Modal from "./components/Modal";
@@ -24,6 +24,7 @@ export default function App() {
       : 0,
   });
   const [isGameOver, setIsGameOver] = useState(false);
+  const isTapPending = useRef(false);
 
   const shuffle = (inputArray: CardType[]) => {
     const outputArray = [...inputArray];
@@ -66,20 +67,29 @@ export default function App() {
 
   useEffect(() => {
     setDisplayedCards(chooseCards());
+    isTapPending.current = false;
   }, [clickedCards]);
 
   const handleClick = (card: CardType) => {
-    if (clickedCards.includes(card)) {
-      setIsGameOver(true);
-    } else {
-      if (score.current >= score.highest) {
-        setScore({ current: score.current + 1, highest: score.highest + 1 });
-        localStorage.setItem("highScore", `${score.highest + 1}`);
+    // Ignore taps until the previous one has reshuffled the cards, so that
+    // this handler never acts on stale state.
+    if (isTapPending.current) return;
+    isTapPending.current = true;
+
+    // Let the press animation play before the cards reshuffle.
+    setTimeout(() => {
+      if (clickedCards.includes(card)) {
+        setIsGameOver(true);
       } else {
-        setScore({ ...score, current: score.current + 1 });
+        if (score.current >= score.highest) {
+          setScore({ current: score.current + 1, highest: score.highest + 1 });
+          localStorage.setItem("highScore", `${score.highest + 1}`);
+        } else {
+          setScore({ ...score, current: score.current + 1 });
+        }
+        setClickedCards([...clickedCards, card]);
       }
-      setClickedCards([...clickedCards, card]);
-    }
+    }, 200);
   };
 
   const handlePlayAgain = () => {
