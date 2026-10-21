@@ -83,17 +83,16 @@ export default function App() {
     focusedSlot.current = -1;
   }, [displayedCards]);
 
-  // Briefly fade the cards in after each reshuffle, so every tap visibly
-  // registers.
+  // Fade the numbers in after each reshuffle, so every tap visibly registers.
+  // Only the numbers fade; the cards themselves stay still.
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    gridRef.current?.animate(
-      [
-        { opacity: 0.4, transform: "scale(0.98)" },
-        { opacity: 1, transform: "none" },
-      ],
-      { duration: 150, easing: "ease-out" }
-    );
+    gridRef.current?.querySelectorAll("span").forEach((number) => {
+      number.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 120,
+        easing: "ease-out",
+      });
+    });
   }, [displayedCards]);
 
   const handleClick = (card: CardType) => {
