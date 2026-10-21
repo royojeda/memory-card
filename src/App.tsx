@@ -117,7 +117,7 @@ export default function App() {
         }
         setClickedCards([...clickedCards, card]);
       }
-    }, 200);
+    }, 120);
   };
 
   const handleResetBest = () => {
